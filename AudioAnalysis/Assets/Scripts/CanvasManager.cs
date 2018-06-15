@@ -13,15 +13,12 @@ public class CanvasManager : MonoBehaviour {
     public Button BtnPlay;
 
     //---------------私有成员---------------------
-    public WavePlayer.WavePlayer wavePlayer_;
-
     //---------------生命周期方法-----------------
 	// Use this for initialization
 	void Start () {
         BtnOpenFile.onClick.AddListener(onBtnClickOpenFile);
         BtnPlay.onClick.AddListener(onBtnClickPlay);
 
-        wavePlayer_ = new WavePlayer.WavePlayer();
 	}
 	
 	// Update is called once per frame
@@ -72,6 +69,5 @@ public class CanvasManager : MonoBehaviour {
         return testInt;
     }
     private void onBtnClickPlay() {
-        wavePlayer_.Play();
     }
 }
