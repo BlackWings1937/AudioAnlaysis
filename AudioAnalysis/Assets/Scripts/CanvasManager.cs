@@ -6,6 +6,9 @@ using System.Runtime.InteropServices;
 using WavePlayer;
 using System.IO;
 using System;
+using System.Threading;
+
+using LitJson;
 
 public class ModuleParamBase { }
 
@@ -47,29 +50,71 @@ public class CanvasManager : MonoBehaviour {
 
     //---------------私有成员---------------------
     public LayerManagerBase activeLm_ = null;
-
+   // private readonly OneThreadSynchronizationContext contex = new OneThreadSynchronizationContext();
+    //private string testC = "temp";
     //---------------生命周期方法-----------------
 	// Use this for initialization
 	void Start () {
-        BtnOpenFile.onClick.AddListener(onBtnClickOpenFile);
-        BtnPlay.onClick.AddListener(onBtnClickPlay);
+        //SynchronizationContext.SetSynchronizationContext(this.contex);
+        StartModule(ModuleType.E_START);
+        //StartCoroutine(count());
+    }
 
-	}
+    IEnumerator count() {
+        Debug.Log("start1");
+        yield return count2();
+        Debug.Log("start2");
+        //yield return count2();
+        Debug.Log("start3");
+        //yield return count2();
+        //yield return count2();
+
+
+    }
+
+    IEnumerator count2() {
+        for (int i = 10;i>=0;i--) {
+            Debug.Log("count2:i:"+i);
+            yield return new WaitForSeconds(0.2f);
+        }
+        Debug.Log("count2:finish");
+        yield return true;
+    }
 	
 	// Update is called once per frame
 	void Update () {
 
+        //this.contex.Update();
     }
     //---------------对外接口----------------------
     public void StartModule(ModuleType type, ModuleParamBase param = null) {
         LayerManagerBase baseLm = null;
         switch (type) {
+            case ModuleType.E_START: 
+                baseLm = LayerStart.GetComponent<LayerManagerBase>();
+                break;
+            case ModuleType.E_OPENNEW:
+                baseLm = LayerOpenNew.GetComponent<LayerManagerBase>();
+                break;
+            case ModuleType.E_OPENOLD:
+                baseLm = LayerOpenOld.GetComponent<LayerManagerBase>();
+                break;
+            case ModuleType.E_PROCESS:
+                baseLm = LayerProcess.GetComponent<LayerManagerBase>();
+                break;
+            case ModuleType.E_EDITOR:
+                baseLm = LayerEditor.GetComponent<LayerManagerBase>();
+                break;
+            case ModuleType.E_EDITORRESULT:
+                baseLm = LayerEditorResult.GetComponent<LayerManagerBase>();
+                break;
         }
-        if (activeLm_ != null) { activeLm_.Dispose(); }
-        if (baseLm != null) { baseLm.StartWithParam(param); activeLm_ = baseLm; }
+        if (activeLm_ != null) { activeLm_.Dispose(); activeLm_.gameObject.SetActive(false); }
+        if (baseLm != null) { baseLm.StartWithParam(param); baseLm.gameObject.SetActive(true); activeLm_ = baseLm; }
     }
 
     //---------------UI事件------------------------
+    /*
     private void onBtnClickOpenFile() {
         OpenFileName openFileName = new OpenFileName();
         openFileName.structSize = Marshal.SizeOf(openFileName);
@@ -111,7 +156,6 @@ public class CanvasManager : MonoBehaviour {
             }
         }
         return testInt;
-    }
-    private void onBtnClickPlay() {
-    }
+    }*/
+
 }

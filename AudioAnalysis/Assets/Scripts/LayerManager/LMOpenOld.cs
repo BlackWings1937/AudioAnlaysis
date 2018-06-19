@@ -29,7 +29,7 @@ public class LMOpenOld : LayerManagerBase
     //---------------UI响应事件----------------
     private void onBtnClickSelectOutPutPath()
     {
-        OpenFileDirUtil.FindFileDir(setOutPutPath);
+        OpenFileDirUtil.SelectDir(setOutPutPath);
     }
     public void onBtnClickBack()
     {

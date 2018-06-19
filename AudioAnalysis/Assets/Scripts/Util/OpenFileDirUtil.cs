@@ -25,10 +25,25 @@ public class OpenFileDirUtil
             cb(openFileName);
         }
     }
-    /*
-    public static void FindFolrdDir(GetDirCallBack cb) {
+    public static void SelectDir(GetDirCallBack cb)
+    {
+        OpenDialogDir ofn2 = new OpenDialogDir();
+        ofn2.pszDisplayName = new string(new char[2000]); ;     // 存放目录路径缓冲区    
+        ofn2.lpszTitle = "Open Project";// 标题    
+        //ofn2.ulFlags = BIF_NEWDIALOGSTYLE | BIF_EDITBOX; // 新的样式,带编辑框    
+        IntPtr pidlPtr = LocalDialog.SHBrowseForFolder(ofn2);
+        char[] charArray = new char[2000];
+        for (int i = 0; i < 2000; i++)
+            charArray[i] = '\0';
+        LocalDialog.SHGetPathFromIDList(pidlPtr, charArray);
+        string fullDirPath = new String(charArray);
+        fullDirPath = fullDirPath.Trim('\0');
+        OpenFileName openFileName = new OpenFileName();
+        openFileName.file = fullDirPath;
+        cb(openFileName);
+    }
 
-        if (LocalDialog.GetSFN) { }
-    }*/
+    
+
 }
 

@@ -23,6 +23,9 @@ public class LMOpenNew : LayerManagerBase
         BtnSelectExcel.onClick.AddListener(onBtnClickSelectExcel);
         BtnSelectAudio.onClick.AddListener(onBtnClickSelectAudio);
         BtnSelectOutPutPath.onClick.AddListener(onBtnClickSelectOutPutPath);
+
+        BtnOk.onClick.AddListener(onBtnClickOk);
+        BtnBack.onClick.AddListener(onBtnClickBack);
     }
     //-------------私有方法--------------
     private void setExcelPath(OpenFileName openFileName)
@@ -35,7 +38,8 @@ public class LMOpenNew : LayerManagerBase
     }
     private void setOutPutPath(OpenFileName openFileName)
     {
-        TextAudioPath.text = openFileName.file;
+
+        TextOutPutPath.text = openFileName.file;
     }
 
     //-------------UI事件----------------
@@ -49,7 +53,7 @@ public class LMOpenNew : LayerManagerBase
     }
     public void onBtnClickSelectOutPutPath()
     {
-        OpenFileDirUtil.FindFileDir(setOutPutPath);
+        OpenFileDirUtil.SelectDir(setOutPutPath);
     }
 
     public void onBtnClickBack()

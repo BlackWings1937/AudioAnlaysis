@@ -18,18 +18,29 @@ public class LMProcess : LayerManagerBase {
 
     //---------------UI事件------------------------
     private void onBtnBack() {
-
+        AudioEditManagercs.Instance.CancleProcess();
+        AudioEditManagercs.Instance.Dispose();
+        CacheCanvasManager.StartModule(CanvasManager.ModuleType.E_OPENNEW);
     }
+
+    //--------------私有方法-----------------------
+    private void onProcessChange(float process) {
+        SliderProcess.value = process;
+    }
+    private void onProcessFinish() { }
 
     //---------------重写方法----------------------
     public override void StartWithParam(ModuleParamBase param)
     {
-        base.StartWithParam(param);
+        ModuleParamToProcess p = (ModuleParamToProcess)param;
+        AudioEditManagercs.Instance.initWithNew(p.StrAudioPath,p.StrOutPutPath, onProcessChange, onProcessFinish);
+        Debug.Log("finish");
+        SliderProcess.value = 1;
     }
 
     public override void Dispose()
     {
-        base.Dispose();
+         
     }
 
 }

@@ -8,8 +8,6 @@ public class TableViewCell<T> : ViewController	// ViewControllerクラスを継�
 		// 実際の処理は継承したクラスで実装する
 	}
 
-    private ActionManager _cacheActionManager;
-
     public virtual void RemoveTexture() {
  
     }
