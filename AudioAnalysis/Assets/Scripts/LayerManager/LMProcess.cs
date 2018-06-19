@@ -1,16 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class LMProcess : MonoBehaviour {
+public class LMProcess : LayerManagerBase {
+    //----------------公有成员---------------------
+    public Button BtnBack;
+    public Slider SliderProcess;
+    public RectTransform RTContent;
+    public Text TextConsoleOutPut;
 
+    //----------------生命周期方法-----------------
 	// Use this for initialization
 	void Start () {
-		
+        BtnBack.onClick.AddListener(onBtnBack);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    //---------------UI事件------------------------
+    private void onBtnBack() {
+
+    }
+
+    //---------------重写方法----------------------
+    public override void StartWithParam(ModuleParamBase param)
+    {
+        base.StartWithParam(param);
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+    }
+
 }
+/*
+  Audio-> AudioPartList 1 
+  Baidu-> AudioPartList 2
+  AudioPartList-> local json file save config 
+               -> audioPart save as pcm part
+               -> orignal audio path
+
+  Singleton AudioEditManager;
+ */

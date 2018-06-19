@@ -236,6 +236,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\CanvasManager.cs" />
+    <Compile Include="Assets\Scripts\Interface\IDispose.cs" />
     <Compile Include="Assets\Scripts\LayerManager\LayerManagerBase.cs" />
     <Compile Include="Assets\Scripts\LayerManager\LMEditor.cs" />
     <Compile Include="Assets\Scripts\LayerManager\LMEditorResult.cs" />
@@ -245,6 +246,11 @@
     <Compile Include="Assets\Scripts\LayerManager\LMStart.cs" />
     <Compile Include="Assets\Scripts\LocalDialog.cs" />
     <Compile Include="Assets\Scripts\OpenFileName.cs" />
+    <Compile Include="Assets\Scripts\Singleton\AudioEditManagercs.cs" />
+    <Compile Include="Assets\Scripts\UI\TableViewCell.cs" />
+    <Compile Include="Assets\Scripts\UI\TableViewController.cs" />
+    <Compile Include="Assets\Scripts\UI\ViewController.cs" />
+    <Compile Include="Assets\Scripts\Util\OpenFileDirUtil.cs" />
     <Compile Include="Assets\Scripts\WavePlayer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

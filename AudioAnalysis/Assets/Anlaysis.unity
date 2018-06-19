@@ -146,6 +146,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BtnOpenFile: {fileID: 1116107768}
   BtnPlay: {fileID: 715909264}
+  LayerStart: {fileID: 0}
+  LayerOpenOld: {fileID: 0}
+  LayerOpenNew: {fileID: 0}
+  LayerProcess: {fileID: 0}
+  LayerEditor: {fileID: 0}
+  LayerEditorResult: {fileID: 0}
+  activeLm_: {fileID: 0}
 --- !u!114 &44502960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,6 +441,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e03735829c1f7343842c61d97b3714d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BtnSelectOutPutPath: {fileID: 0}
+  TextOutPutPath: {fileID: 0}
+  BtnBack: {fileID: 0}
+  BtnOk: {fileID: 0}
 --- !u!114 &135779071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -995,6 +1006,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e6b238c63c3a1408bd541157a3cafc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BtnBack: {fileID: 0}
+  SliderProcess: {fileID: 0}
+  RTContent: {fileID: 0}
+  TextConsoleOutPut: {fileID: 0}
 --- !u!1 &364708199
 GameObject:
   m_ObjectHideFlags: 0
@@ -1232,6 +1247,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c1530503570f63439cd86950b8850b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BtnSelectExcel: {fileID: 0}
+  BtnSelectAudio: {fileID: 0}
+  BtnSelectOutPutPath: {fileID: 0}
+  TextExcelPath: {fileID: 0}
+  TextAudioPath: {fileID: 0}
+  TextOutPutPath: {fileID: 0}
+  BtnBack: {fileID: 0}
+  BtnOk: {fileID: 0}
 --- !u!1 &418591395
 GameObject:
   m_ObjectHideFlags: 0
@@ -2563,6 +2586,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1950de14e22644f4b9768dc35e4ad6bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BtnOpenNew: {fileID: 0}
+  BtnOpenOld: {fileID: 0}
 --- !u!1 &823361161
 GameObject:
   m_ObjectHideFlags: 0

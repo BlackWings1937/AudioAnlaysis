@@ -6,13 +6,48 @@ using System.Runtime.InteropServices;
 using WavePlayer;
 using System.IO;
 using System;
-public class CanvasManager : MonoBehaviour {
 
+public class ModuleParamBase { }
+
+public class ModuleParamToProcess :ModuleParamBase{
+    public string StrExcelPath;
+    public string StrAudioPath;
+    public string StrOutPutPath;
+
+    public ModuleParamToProcess(string strExcelPath, string strAudioPath, string strOutPutPath)
+    {
+        StrExcelPath = strExcelPath;
+        StrAudioPath = strAudioPath;
+        StrOutPutPath = strOutPutPath;
+    }
+}
+
+public class ModuleParamToEditor :ModuleParamBase{
+    public string StrOutPutPath;
+
+    public ModuleParamToEditor(string strOutPutPath)
+    {
+        StrOutPutPath = strOutPutPath;
+    }
+}
+
+public class CanvasManager : MonoBehaviour {
+    //界面枚举
+    public enum ModuleType { E_START,E_OPENNEW,E_OPENOLD,E_PROCESS,E_EDITOR,E_EDITORRESULT }
     //---------------公有成员---------------------
     public Button BtnOpenFile;
     public Button BtnPlay;
 
+    public GameObject LayerStart;
+    public GameObject LayerOpenOld;
+    public GameObject LayerOpenNew;
+    public GameObject LayerProcess;
+    public GameObject LayerEditor;
+    public GameObject LayerEditorResult;
+
     //---------------私有成员---------------------
+    public LayerManagerBase activeLm_ = null;
+
     //---------------生命周期方法-----------------
 	// Use this for initialization
 	void Start () {
@@ -25,6 +60,15 @@ public class CanvasManager : MonoBehaviour {
 	void Update () {
 
     }
+    //---------------对外接口----------------------
+    public void StartModule(ModuleType type, ModuleParamBase param = null) {
+        LayerManagerBase baseLm = null;
+        switch (type) {
+        }
+        if (activeLm_ != null) { activeLm_.Dispose(); }
+        if (baseLm != null) { baseLm.StartWithParam(param); activeLm_ = baseLm; }
+    }
+
     //---------------UI事件------------------------
     private void onBtnClickOpenFile() {
         OpenFileName openFileName = new OpenFileName();
