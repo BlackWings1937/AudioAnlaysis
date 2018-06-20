@@ -51,6 +51,11 @@ public class FileUtil
         sw.Dispose();
     }
 
+    /*
+     * 尝试创建文件夹
+     * 参数:
+     * path:文件夹路径
+     */
     public static void TryCreateFolder(string path)
     {
         if (!Directory.Exists(path))
@@ -58,4 +63,26 @@ public class FileUtil
             DirectoryInfo di = Directory.CreateDirectory(path);
         }
     }
+
+    /*
+     * 获取文件后缀名
+     * 参数:
+     * path:文件路径
+     */
+    public static string GetFileLastName(string path) {
+        string aLastName = path.Substring(path.LastIndexOf(".") + 1, (path.Length - path.LastIndexOf(".") - 1));
+        return aLastName;
+    }
+
+    /*
+     * 获取文件名
+     * 参数:
+     * path:文件路径
+     */
+    public static string GetFileName(string path) {
+        string aFirstName = path.Substring(path.LastIndexOf("\\") + 1, (path.LastIndexOf(".") - path.LastIndexOf("\\") - 1));
+        return aFirstName;
+    }
+
+
 }

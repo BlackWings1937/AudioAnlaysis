@@ -37,6 +37,7 @@ public class AudioPart
         textArr = aimTextArr;
         textPingYinArr = aimTextPingYingArr;
         strText = word;
+
         AudioEditManagercs.Instance.TransformAudioPartToWordCallBack();
     }
 }
@@ -58,8 +59,7 @@ public class VoiceToWordParam {
     public string speech;
 }
 
-public delegate void ProcessCb(float process);
-public delegate void CallBackZero();
+
 
 public class AudioEditManagercs : MonoBehaviour, IDispose
 {
@@ -88,6 +88,9 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
     private CallBackZero finishCb_ = null;
     private float nowProcess_ = 0;
     private int callBackTime = 0;
+    private Coroutine corCut = null;
+    private Coroutine corTrans = null;
+    private bool isProcessing_ = false;
 
 
     //--------------常量-----------------------------
@@ -147,6 +150,18 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
         string strJson = FileUtil.LoadFile(strOutPutPath_, AUDIO_PART_CONFIG_FILE_NAME);
         AudioPartConfig config = JsonUtility.FromJson<AudioPartConfig>(strJson);
         listAudioParts_ = config.ListAudioParts;
+    }
+
+    /*
+     * 检查片段音频数组中的片段文件是否都存在
+     */
+    private bool checkAudioParts() {
+        for (int i = 0;i<listAudioParts_.Count;++i) {
+            if (!File.Exists(listAudioParts_[i].audioPath)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     void cutAudioByDotOneTime(Byte[] audio, long startDotOneTime, long EndDotOneTime, List<AudioPart> audioListPart)
@@ -295,7 +310,7 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
     }
     private void initListAudioPart(byte[] buffer,CallBackZero cb = null)
     {
-        StartCoroutine(cutAudio(listAudioParts_, buffer, 4,cb));
+        corCut = StartCoroutine(cutAudio(listAudioParts_, buffer, 4,cb));
     }
     private void transformAudioPartToWord(AudioPart audioPart)
     {
@@ -304,12 +319,18 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
     }
 
     public void TransformAudioPartToWordCallBack() {
-        callBackTime++;
-        NowProcess = 0.5f + (((float)callBackTime) / (float)listAudioParts_.Count) / 2;
-        if (callBackTime>=listAudioParts_.Count) {
-            saveAudioPartConfig();
-            if (finishCb_ != null) {
-                finishCb_();
+        if (isProcessing_) {
+            callBackTime++;
+            NowProcess = 0.5f + (((float)callBackTime) / (float)listAudioParts_.Count) / 2;
+            if (callBackTime >= listAudioParts_.Count)
+            {
+                NowProcess = 1;
+                saveAudioPartConfig();
+                if (finishCb_ != null)
+                {
+                    finishCb_();
+                }
+                isProcessing_ = false;
             }
         }
     }
@@ -337,7 +358,8 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
      * 首次拆分音频结束后的回调
      */
     private void onInitListAudioPartCallBack() {
-        StartCoroutine(transformAudioPartsToWord());
+        corCut = null;
+        corTrans = StartCoroutine(transformAudioPartsToWord());
     }
 
     //-------------对外接口------------------
@@ -348,6 +370,17 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
         ProcessCb cb = null, 
         CallBackZero finishCb = null)
     {
+
+        /*
+         * 如果文件夹已经存在则删除
+         */
+        if (Directory.Exists(strOutPutPath_ + "\\" + FLODER_NAME_FIRST_CUT)) {
+            Directory.Delete(strOutPutPath_ + "\\" + FLODER_NAME_FIRST_CUT, true);
+        }
+
+        /*
+         * 初始化
+         */
         strAudioPath_ = strAudioPath;
         strOutPutPath_ = outPutPath;
         processCb_ = cb;
@@ -359,20 +392,39 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
         /*
          * 大规模工作集合
          */
+        isProcessing_ = true;
         initListAudioPart(buffer_, onInitListAudioPartCallBack);
     }
 
     public void CancleProcess() {
-        StopCoroutine("cutAudio");
-        StopCoroutine("transformAudioPartsToWord");
+        /*
+         * 终止进程携程
+         */
+        isProcessing_ = false;
+        if (corCut != null)
+            StopCoroutine(corCut);
+        if(corTrans != null)
+            StopCoroutine(corTrans);
+
+        /*
+         * 删除项目文件
+         */
         Directory.Delete(strOutPutPath_ + "\\" + FLODER_NAME_FIRST_CUT, true);
     }
 
-    public void initWithOld(string outPutPath)
+    public bool initWithOld(string outPutPath,string audioPath)
     {
         strOutPutPath_ = outPutPath;
-        readAudioPartConfig();
-
+        if (File.Exists( strOutPutPath_+"\\"+ AUDIO_PART_CONFIG_FILE_NAME)) {
+            readAudioPartConfig();
+            if (checkAudioParts()) {
+                initBuffer(audioPath);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     public List<AudioPart> GetAudioPartsList() {
@@ -381,6 +433,8 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
 
     public void Dispose()
     {
+        corCut = null;
+        corTrans = null;
         nowProcess_ = 0;
         finishCb_ = null;
         processCb_ = null;

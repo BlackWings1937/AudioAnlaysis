@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.IO;
 
 public class LMOpenOld : LayerManagerBase
 {
@@ -29,7 +31,7 @@ public class LMOpenOld : LayerManagerBase
     //---------------UI响应事件----------------
     private void onBtnClickSelectOutPutPath()
     {
-        OpenFileDirUtil.SelectDir(setOutPutPath);
+        OpenFileDirUtil.SelectDir(setOutPutPath, "请选择输出工程路径");
     }
     public void onBtnClickBack()
     {
@@ -37,10 +39,47 @@ public class LMOpenOld : LayerManagerBase
     }
     public void onBtnClickOk()
     {
-        CacheCanvasManager.StartModule(
-            CanvasManager.ModuleType.E_EDITOR,
-            new ModuleParamToEditor(TextOutPutPath.text)
-            );
+        if (TextOutPutPath.text != null)
+        {
+            /*
+             * 读取源数据配置文件
+             */
+            string strJson = FileUtil.LoadFile(TextOutPutPath.text, LMOpenNew.FILE_NAME_SOURCE_CONFIG);
+            SourceDataConfig s = JsonUtility.FromJson<SourceDataConfig>(strJson);
+
+            /*
+             * 检查工程文件是否都完整
+             */
+            if (!File.Exists(s.StrAudioSourcePath)) {
+                return;
+            }
+            if (!File.Exists(s.StrExcelPath)) {
+                return;
+            }
+
+            /*
+             * 装载任务的配置文件
+             */
+            if (!TaskManager.Instance.InitByConfig(TextOutPutPath.text)) {
+                return;
+            }
+
+            /*
+             * 装载配置文件到AudioPart Manager
+             */
+            if (!AudioEditManagercs.Instance.initWithOld(TextOutPutPath.text,s.StrAudioSourcePath)) {
+                AudioEditManagercs.Instance.Dispose();
+                return;
+            }
+
+            /*
+             * 跳转界面到编辑界面
+             */
+            CacheCanvasManager.StartModule(
+                CanvasManager.ModuleType.E_EDITOR,
+                new ModuleParamToEditor(TextOutPutPath.text)
+                );
+        }
     }
 
     //---------------重写方法------------------

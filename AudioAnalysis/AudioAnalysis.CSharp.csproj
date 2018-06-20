@@ -279,6 +279,9 @@
     <Reference Include="System.Runtime.Serialization">
       <HintPath>Library\UnityAssemblies\System.Runtime.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data">
+      <HintPath>Library\UnityAssemblies\System.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml">
       <HintPath>Library\UnityAssemblies\System.Xml.dll</HintPath>
     </Reference>

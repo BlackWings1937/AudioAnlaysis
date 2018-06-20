@@ -276,3 +276,5 @@ E:\EtExProject\AudioAnlaysis\AudioAnalysis\obj\Debug\Assembly-CSharp.csproj.Core
 E:\EtExProject\AudioAnlaysis\AudioAnalysis\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 E:\EtExProject\AudioAnlaysis\AudioAnalysis\obj\Debug\Assembly-CSharp.dll
 E:\EtExProject\AudioAnlaysis\AudioAnalysis\obj\Debug\Assembly-CSharp.pdb
+E:\EtExProject\AudioAnlaysis\AudioAnalysis\Temp\bin\Debug\Excel.dll
+E:\EtExProject\AudioAnlaysis\AudioAnalysis\Temp\bin\Debug\ICSharpCode.SharpZipLib.dll

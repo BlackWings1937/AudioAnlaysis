@@ -12,7 +12,8 @@ using LitJson;
 
 public class ModuleParamBase { }
 
-public class ModuleParamToProcess :ModuleParamBase{
+public class ModuleParamToProcess : ModuleParamBase
+{
     public string StrExcelPath;
     public string StrAudioPath;
     public string StrOutPutPath;
@@ -25,7 +26,8 @@ public class ModuleParamToProcess :ModuleParamBase{
     }
 }
 
-public class ModuleParamToEditor :ModuleParamBase{
+public class ModuleParamToEditor : ModuleParamBase
+{
     public string StrOutPutPath;
 
     public ModuleParamToEditor(string strOutPutPath)
@@ -34,9 +36,10 @@ public class ModuleParamToEditor :ModuleParamBase{
     }
 }
 
-public class CanvasManager : MonoBehaviour {
+public class CanvasManager : MonoBehaviour
+{
     //界面枚举
-    public enum ModuleType { E_START,E_OPENNEW,E_OPENOLD,E_PROCESS,E_EDITOR,E_EDITORRESULT }
+    public enum ModuleType { E_START, E_OPENNEW, E_OPENOLD, E_PROCESS, E_EDITOR, E_EDITORRESULT }
     //---------------公有成员---------------------
     public Button BtnOpenFile;
     public Button BtnPlay;
@@ -50,47 +53,65 @@ public class CanvasManager : MonoBehaviour {
 
     //---------------私有成员---------------------
     public LayerManagerBase activeLm_ = null;
-   // private readonly OneThreadSynchronizationContext contex = new OneThreadSynchronizationContext();
+    // private readonly OneThreadSynchronizationContext contex = new OneThreadSynchronizationContext();
     //private string testC = "temp";
     //---------------生命周期方法-----------------
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    private AudioPart ap_ = null;
+    private List<AudioPart> lap_ = new List<AudioPart>();
+    void Start()
+    {
         //SynchronizationContext.SetSynchronizationContext(this.contex);
         StartModule(ModuleType.E_START);
-        //StartCoroutine(count());
+        //AudioPart ap = new AudioPart();
+        //lap_.Add(ap);
+        //StartCoroutine(count(lap_[0].transformCb));
     }
 
-    IEnumerator count() {
-        Debug.Log("start1");
-        yield return count2();
-        Debug.Log("start2");
-        //yield return count2();
-        Debug.Log("start3");
-        //yield return count2();
-        //yield return count2();
-
-
+    IEnumerator count(CallBack cb)
+    {
+        int i = 0;
+        while (true)
+        {
+            //Debug.Log("process"+ i);
+            i++;
+            if (cb != null)
+            {
+                cb("str");
+            }
+            else
+            {
+                Debug.Log("cb == null");
+            }
+            yield return new WaitForSeconds(0.5f);
+        }
+        Debug.Log("count result");
     }
 
-    IEnumerator count2() {
-        for (int i = 10;i>=0;i--) {
-            Debug.Log("count2:i:"+i);
+    IEnumerator count2()
+    {
+        for (int i = 10; i >= 0; i--)
+        {
+            Debug.Log("count2:i:" + i);
             yield return new WaitForSeconds(0.2f);
         }
         Debug.Log("count2:finish");
         yield return true;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
 
         //this.contex.Update();
     }
     //---------------对外接口----------------------
-    public void StartModule(ModuleType type, ModuleParamBase param = null) {
+    public void StartModule(ModuleType type, ModuleParamBase param = null)
+    {
         LayerManagerBase baseLm = null;
-        switch (type) {
-            case ModuleType.E_START: 
+        switch (type)
+        {
+            case ModuleType.E_START:
                 baseLm = LayerStart.GetComponent<LayerManagerBase>();
                 break;
             case ModuleType.E_OPENNEW:
@@ -157,5 +178,10 @@ public class CanvasManager : MonoBehaviour {
         }
         return testInt;
     }*/
-
+    /*
+    private void OnGUI()
+    {
+        if (GUILayout.Button("stop count"))
+            lap_.Clear();
+    }*/
 }

@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\BaiduManager.cs" />
     <Compile Include="Assets\Scripts\CanvasManager.cs" />
+    <Compile Include="Assets\Scripts\Global\DelegateFunction.cs" />
     <Compile Include="Assets\Scripts\Interface\IDispose.cs" />
     <Compile Include="Assets\Scripts\LayerManager\LayerManagerBase.cs" />
     <Compile Include="Assets\Scripts\LayerManager\LMEditor.cs" />
@@ -74,11 +75,16 @@
     <Compile Include="Assets\Scripts\OpenFileName.cs" />
     <Compile Include="Assets\Scripts\PinYinHelper.cs" />
     <Compile Include="Assets\Scripts\Singleton\AudioEditManagercs.cs" />
+    <Compile Include="Assets\Scripts\Singleton\TaskManager.cs" />
     <Compile Include="Assets\Scripts\UI\TableViewCell.cs" />
     <Compile Include="Assets\Scripts\UI\TableViewController.cs" />
+    <Compile Include="Assets\Scripts\UI\TVInstanceTaskCell\CellTask.cs" />
+    <Compile Include="Assets\Scripts\UI\TVInstanceTaskCell\TableViewTasks.cs" />
     <Compile Include="Assets\Scripts\UI\ViewController.cs" />
     <Compile Include="Assets\Scripts\Util\FileUtil.cs" />
+    <Compile Include="Assets\Scripts\Util\GameObjectUtil.cs" />
     <Compile Include="Assets\Scripts\Util\OpenFileDirUtil.cs" />
+    <Compile Include="Assets\Scripts\Util\TransformUtil.cs" />
     <Compile Include="Assets\Scripts\WavePlayer.cs" />
     <None Include="Assets\ThreeParty\thirdparty\Newtonsoft.Json.xml" />
     <None Include="Assets\ThreeParty\Newtonsoft.Json.xml" />
@@ -283,6 +289,18 @@
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
+    <Reference Include="Excel">
+      <HintPath>E:/EtExProject/AudioAnlaysis/AudioAnalysis/Assets/Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>E:/EtExProject/AudioAnlaysis/AudioAnalysis/Assets/ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="LitJson">
+      <HintPath>E:/EtExProject/AudioAnlaysis/AudioAnalysis/Assets/LitJson.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>E:/EtExProject/AudioAnlaysis/AudioAnalysis/Assets/System.Data.dll</HintPath>
+    </Reference>
     <Reference Include="AipSdk">
       <HintPath>E:/EtExProject/AudioAnlaysis/AudioAnalysis/Assets/ThreeParty/AipSdk.dll</HintPath>
     </Reference>
@@ -306,9 +324,6 @@
     </Reference>
     <Reference Include="UnityEngine.StandardEvents">
       <HintPath>C:/Users/DELL/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.13/UnityEngine.StandardEvents.dll</HintPath>
-    </Reference>
-    <Reference Include="LitJson">
-      <HintPath>E:/EtExProject/AudioAnlaysis/AudioAnalysis/Assets/LitJson.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>D:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
@@ -369,6 +384,9 @@
     </Reference>
     <Reference Include="System.Data.Common">
       <HintPath>D:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Data.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>D:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Data.dll</HintPath>
     </Reference>
     <Reference Include="System.Diagnostics.Contracts">
       <HintPath>D:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Diagnostics.Contracts.dll</HintPath>

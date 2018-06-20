@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
-public class TableViewCell<T> : ViewController	// ViewControllerクラスを継承する
+public class TableViewCell<T> : ViewController ,IDispose	// ViewControllerクラスを継承する
 {
+
 	// セルの内容を更新するメソッド
 	public virtual void UpdateContent(T itemData)
 	{
@@ -11,6 +12,12 @@ public class TableViewCell<T> : ViewController	// ViewControllerクラスを継�
     public virtual void RemoveTexture() {
  
     }
+
+    public virtual void Dispose()
+    {
+        throw new System.NotImplementedException();
+    }
+
     private CanvasGroup _cacheCanvasGroup;
     public CanvasGroup CacheCanvasGroup {
         get {
@@ -21,8 +28,10 @@ public class TableViewCell<T> : ViewController	// ViewControllerクラスを継�
         }
     }
 
-	// セルに対応するリスト項目のインデックスを保持
-	public int DataIndex { get; set; }
+    private GameObject cacheManager_;
+
+    // セルに対応するリスト項目のインデックスを保持
+    public int DataIndex { get; set; }
 	
 	// セルの高さを取得、設定するプロパティ
 	public float Height
@@ -108,4 +117,18 @@ public class TableViewCell<T> : ViewController	// ViewControllerクラスを継�
 				value - new Vector2(0.0f, corners[3].y);
 		}
 	}
+
+    public GameObject CacheManager
+    {
+        get
+        {
+            if (cacheManager_ == null) cacheManager_ = transform.parent.parent.parent.gameObject;
+            return cacheManager_;
+        }
+
+        set
+        {
+            cacheManager_ = value;
+        }
+    }
 }

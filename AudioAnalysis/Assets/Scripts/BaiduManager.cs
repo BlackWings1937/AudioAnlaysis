@@ -86,10 +86,15 @@ public class BaiduManager : MonoBehaviour {
                 Debug.Log("error:" + getASW.error);
             }
             Debug.Log("此次语音文字为：" + audioToString);
+
             if (cb != null)
             {
                 cb(audioToString);
             }
+        }
+        else {
+            Debug.Log("错误");
+            //cb("")
         }
     }
 

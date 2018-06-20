@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 
+public delegate void OnValueRateChangeCallBack( float rate);
+
 [RequireComponent(typeof(ScrollRect))]
 public class TableViewController<T> : ViewController		// ViewControllerクラスを継承
 {
@@ -10,8 +12,10 @@ public class TableViewController<T> : ViewController		// ViewControllerクラス
 	[SerializeField] private float spacingHeight = 4.0f;	// 各セルの間隔
     [SerializeField] private float spacingWidth = 4.0f;
 
-	// Scroll Rectコンポーネントをキャッシュ
-	private ScrollRect cachedScrollRect;
+    public event OnValueRateChangeCallBack OnValueRateChange;
+
+    // Scroll Rectコンポーネントをキャッシュ
+    private ScrollRect cachedScrollRect;
 	public ScrollRect CachedScrollRect
 	{
 		get {
@@ -172,9 +176,17 @@ public class TableViewController<T> : ViewController		// ViewControllerクラス
         visibleRect.height =  CachedRectTransform.rect.height + 
 			visibleRectPadding.top + visibleRectPadding.bottom;
 	}
-#endregion
+    #endregion
 
-#region テーブルビューの表示内容を更新する処理の実装
+    #region テーブルビューの表示内容を更新する処理の実装
+    /*
+     * 移动内容层到指定比例
+     */
+    public void MoveTableViewContentToRate(float rate) {
+        Vector2 sizeOfContent = ((RectTransform)CachedScrollRect.content.transform).sizeDelta;
+        float x = -sizeOfContent.x * rate;
+        GameObjectUtil.SetX(cachedScrollRect.content.gameObject,x);
+    }
 
     protected void UpdateContentsByIndex(int index) {
 
@@ -400,6 +412,9 @@ public class TableViewController<T> : ViewController		// ViewControllerクラス
 	// スクロールビューがスクロールされたときに呼ばれる
 	public void OnScrollPosChanged(Vector2 scrollPos)
 	{
+        if (OnValueRateChange!= null) {
+            OnValueRateChange.Invoke(Mathf.Abs( CachedScrollRect.content.transform.localPosition.x / ((RectTransform)CachedScrollRect.content.transform).sizeDelta.x));
+        }
 		// visibleRectを更新する
 		UpdateVisibleRect();
 		// スクロールした方向によって、セルを再利用して表示を更新する
