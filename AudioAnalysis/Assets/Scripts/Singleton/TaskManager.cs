@@ -12,7 +12,16 @@ using System.Data;
 [Serializable]
 public class TaskResult
 {
+    public List<AudioPart> ListAudioParts = new List<AudioPart>();
+    public float MarchRate;
+    public int StartMarchIndex;
+    public int StopMarchIndex;
+    public TaskTransform task;
+}
 
+[Serializable]
+public class TaskResultsGroup {
+    public List<TaskResult> ListResults;
 }
 
 [Serializable]
@@ -21,11 +30,41 @@ public class TaskTransform
     
     public TaskResult TopResult = null;
     public List<TaskResult> ListTaskResult = new List<TaskResult>();
+    public string PathOfListTaskResult;
     public string StrAudioId;
     public string StrTaskWord;
+    public string[] arrStrPingYing;
     public int ExcelCol;
     public event CallBackBool OnIsFinishChange;
     public bool isFinish = false;
+
+    /*
+     * 常数
+     */
+    public const string FILE_NAME_PRE = "TaskTransform:";
+    public const string FOLDER_NAME_RESULTS_CONFIG = "ResultConfig";
+
+    /*
+     * 保存可行方案到本地
+     */
+    public void SaveResultToLocalByOutPutPath(string outputPath) {
+        TaskResultsGroup g = new TaskResultsGroup();
+        g.ListResults = ListTaskResult;
+        string strJson = JsonUtility.ToJson(g);
+        FileUtil.CreateFile(
+            outputPath+"\\"+ FOLDER_NAME_RESULTS_CONFIG
+            , FILE_NAME_PRE+ StrTaskWord,
+            strJson);
+    }
+
+    /*
+     * 读取所有方案到内存
+     */
+    public void ReadResultToMemory(string outputPath) {
+        string strJson = FileUtil.LoadFile(outputPath + "\\" + FOLDER_NAME_RESULTS_CONFIG, FILE_NAME_PRE + StrTaskWord);
+        TaskResultsGroup g = JsonUtility.FromJson<TaskResultsGroup>(strJson);
+        ListTaskResult = g.ListResults;
+    }
 
     public bool IsFinish
     {
@@ -106,6 +145,7 @@ public class TaskManager : MonoBehaviour, IDisposable
             t.ExcelCol = y;
             t.StrAudioId = tempAudio;
             t.StrTaskWord = tempword;
+            t.arrStrPingYing = StringUtil.GetPingYingArrayFromChinaString(StringUtil.GetChinaWordFromString(t.StrTaskWord));
             listTasks_.Add(t);
             index++;
         }

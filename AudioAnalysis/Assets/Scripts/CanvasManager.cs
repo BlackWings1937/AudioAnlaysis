@@ -53,57 +53,13 @@ public class CanvasManager : MonoBehaviour
 
     //---------------私有成员---------------------
     public LayerManagerBase activeLm_ = null;
-    // private readonly OneThreadSynchronizationContext contex = new OneThreadSynchronizationContext();
-    //private string testC = "temp";
     //---------------生命周期方法-----------------
     // Use this for initialization
     private AudioPart ap_ = null;
     private List<AudioPart> lap_ = new List<AudioPart>();
     void Start()
     {
-        //SynchronizationContext.SetSynchronizationContext(this.contex);
         StartModule(ModuleType.E_START);
-        //AudioPart ap = new AudioPart();
-        //lap_.Add(ap);
-        //StartCoroutine(count(lap_[0].transformCb));
-    }
-
-    IEnumerator count(CallBack cb)
-    {
-        int i = 0;
-        while (true)
-        {
-            //Debug.Log("process"+ i);
-            i++;
-            if (cb != null)
-            {
-                cb("str");
-            }
-            else
-            {
-                Debug.Log("cb == null");
-            }
-            yield return new WaitForSeconds(0.5f);
-        }
-        Debug.Log("count result");
-    }
-
-    IEnumerator count2()
-    {
-        for (int i = 10; i >= 0; i--)
-        {
-            Debug.Log("count2:i:" + i);
-            yield return new WaitForSeconds(0.2f);
-        }
-        Debug.Log("count2:finish");
-        yield return true;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-        //this.contex.Update();
     }
     //---------------对外接口----------------------
     public void StartModule(ModuleType type, ModuleParamBase param = null)
@@ -136,30 +92,6 @@ public class CanvasManager : MonoBehaviour
 
     //---------------UI事件------------------------
     /*
-    private void onBtnClickOpenFile() {
-        OpenFileName openFileName = new OpenFileName();
-        openFileName.structSize = Marshal.SizeOf(openFileName);
-        openFileName.filter = "";// "Excel文件(*.xlsx)\0*.xlsx";
-        openFileName.file = new string(new char[256]);
-        openFileName.maxFile = openFileName.file.Length;
-        openFileName.fileTitle = new string(new char[64]);
-        openFileName.maxFileTitle = openFileName.fileTitle.Length;
-        openFileName.initialDir = Application.streamingAssetsPath.Replace('/', '\\');//默认路径
-        openFileName.title = "窗口标题";
-        openFileName.flags = 0x00080000 | 0x00001000 | 0x00000800 | 0x00000008;
-
-        if (LocalDialog.GetSaveFileName(openFileName))
-        {
-            Debug.Log(openFileName.file);
-            Debug.Log(openFileName.fileTitle);
-            byte[] buffer = File.ReadAllBytes(openFileName.file);
-            AudioClip audio = AudioClip.Create("test", buffer.Length/2, 1, 16000, false);
-            audio.SetData(TransformByteToFloat(buffer),0);
-            this.gameObject.GetComponent<AudioSource>().clip = audio;
-            this.gameObject.GetComponent<AudioSource>().Play();
-        }
-    }
-
     private float[] TransformByteToFloat(byte [] buffer) {
         float[] testInt = new float[buffer.Length / 2];
         int index = 0;

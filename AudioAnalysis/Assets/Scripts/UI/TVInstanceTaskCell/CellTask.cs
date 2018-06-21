@@ -70,7 +70,9 @@ public class CellTask : TableViewCell<TaskTransform> {
 
     //--------------UI相应事件-----------------
     public void onBtnClickPlay() { }
-    public void onBtnClickEdit() { }
+    public void onBtnClickEdit() {
+        CacheManager.GetComponent<LMEditor>().OpenEditTaskView(data_);
+    }
 
     public void onBtnClickMarkFinish() {
         CacheManager.GetComponent<LMEditor>().MarkFinish(data_);

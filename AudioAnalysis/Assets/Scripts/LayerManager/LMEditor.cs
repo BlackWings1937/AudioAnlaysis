@@ -9,6 +9,7 @@ public class LMEditor : LayerManagerBase
     //--------------公有成员-----------------------
     public Button BtnBack;
     public Button BtnPublish;
+    public Button BtnStartMatch;
 
 
     public Slider SliderTableViewTask;
@@ -16,16 +17,17 @@ public class LMEditor : LayerManagerBase
     public GameObject GTaskProcess;
     public GameObject PrefabTaskProcessPart;
     public List<GameObject> ListTaskProcessPart = new List<GameObject>();
+    public EditorResultLayer EditResultLayer;
     //--------------私有成员----------------------
     private List<TaskTransform> listTasks_ = null;
 
     //--------------生命周期方法-------------------
     void Start()
     {
+        BtnStartMatch.onClick.AddListener(onBtnClickProcessMarching);
         BtnBack.onClick.AddListener(onBtnClickBack);
         BtnPublish.onClick.AddListener(onBtnClickPublish);
         SliderTableViewTask.onValueChanged.AddListener(onValueChangeSliderTableViewTask);
-        
     }
 
     //-------------重写方法------------------------
@@ -51,13 +53,16 @@ public class LMEditor : LayerManagerBase
          */
         float width = GameObjectUtil.GetWidth(GTaskProcess);
         float length = width / (float)listTasks.Count;
-        for (int i = 0; i < listTasks.Count; ++i) {
+        for (int i = 0; i < listTasks.Count; ++i)
+        {
             GameObject part = GameObject.Instantiate(PrefabTaskProcessPart);
             GameObjectUtil.SetWidth(part, length);
-            if (listTasks[i].IsFinish) {
+            if (listTasks[i].IsFinish)
+            {
                 GameObjectUtil.SetColor(part, Color.blue);
             }
-            else {
+            else
+            {
                 GameObjectUtil.SetColor(part, Color.red);
             }
             GameObjectUtil.SetX(part, i * length);
@@ -77,6 +82,7 @@ public class LMEditor : LayerManagerBase
     }
 
     //---------------UI事件------------------------
+
     private void onBtnClickBack()
     {
         TaskManager.Instance.SaveTasksConfig();
@@ -88,6 +94,10 @@ public class LMEditor : LayerManagerBase
     {
 
     }
+    private void onBtnClickProcessMarching()
+    {
+        processMarching();
+    }
     private void onValueChangeSliderTableViewTask(float value)
     {
         MyTableViewTasks.MoveTableViewContentToRate(value);
@@ -97,19 +107,90 @@ public class LMEditor : LayerManagerBase
         SliderTableViewTask.value = rate;
     }
     //-------------私有方法------------------------
-    private void setAudioPartFinishOrNotOnSlider(int index, bool isFinish) {
+
+    /*
+     * 生成比较结果的进程
+     */
+    private void processMarching()
+    {
+        List<TaskTransform> listTasks = TaskManager.Instance.GetTasks();
+        List<AudioPart> listAudioParts = AudioEditManagercs.Instance.GetAudioPartsList();
+        /*
+         * 生成第一次比较结果
+         */
+        TaskTransform t = null;
+        AudioPart a = null;
+        TaskResult tr = null;
+        float matchRateThanTask = 0;
+        float matchRateThanAudioPart = 0;
+
+        float LOWER_MAIN_BODY_MARCH_RATE = 0.5f;
+        int startMarchIndex = 0;
+        int stopMarchIndex = 0;
+        for (int i = 0; i < listTasks.Count; ++i)
+        {
+            t = listTasks[i];
+            t.ListTaskResult.Clear();
+            for (int z = 0; z < listAudioParts.Count; ++z)
+            {
+                a = listAudioParts[z];
+                matchRateThanTask = ArrayUtil<string>.CaculateRegularSimilar(t.arrStrPingYing, a.textPingYinArr) ; //StringUtil.CaculateStringSimilar(t.StrTaskWord, a.strText);// 解决复杂度
+                matchRateThanAudioPart = ArrayUtil<string>.CaculateRegularSimilar(a.textPingYinArr, t.arrStrPingYing);//StringUtil.CaculateStringSimilar(a.strText, t.StrTaskWord);
+                if (matchRateThanTask >= LOWER_MAIN_BODY_MARCH_RATE)
+                {
+
+                    tr = new TaskResult();
+                    tr.MarchRate = (matchRateThanTask + matchRateThanAudioPart) / 2.0f;
+                    tr.ListAudioParts.Add(a);
+                    t.ListTaskResult.Add(tr);
+  
+                    if (matchRateThanAudioPart > matchRateThanTask)
+                    {
+                        tr = new TaskResult();
+                        tr.MarchRate = (matchRateThanTask + matchRateThanAudioPart) / 2.0f - 0.1f;
+                        int index = AudioEditManagercs.Instance.GetIndexByAudioPart(a);
+                        if (index != -1) {
+                            for (int x = 0; x < 3; x++)
+                            {
+                                AudioPart apNow = AudioEditManagercs.Instance.GetAudioPartByIndex(index - 1 + x);
+                                tr.ListAudioParts.Add(apNow);
+                            }
+                            t.ListTaskResult.Add(tr);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        TaskManager.Instance.SaveTasksConfig();
+    }
+
+    /*
+     * 主体相似度比较方法
+     */
+
+
+
+    private void setAudioPartFinishOrNotOnSlider(int index, bool isFinish)
+    {
         if (index < 0 || index >= ListTaskProcessPart.Count) return;
         GameObject g = ListTaskProcessPart[index];
-        if (isFinish) {
+        if (isFinish)
+        {
             GameObjectUtil.SetColor(g, Color.blue);
         }
-        else {
+        else
+        {
             GameObjectUtil.SetColor(g, Color.red);
         }
     }
-    private int findTaskAtInidex(TaskTransform task) {
-        for (int i= 0;i<listTasks_.Count;++i) {
-            if (listTasks_[i] == task) {
+    private int findTaskAtInidex(TaskTransform task)
+    {
+        for (int i = 0; i < listTasks_.Count; ++i)
+        {
+            if (listTasks_[i] == task)
+            {
                 return i;
             }
         }
@@ -120,9 +201,11 @@ public class LMEditor : LayerManagerBase
     /*
      * 标记任务完成
      */
-    public void MarkFinish(TaskTransform task) {
+    public void MarkFinish(TaskTransform task)
+    {
         int index = findTaskAtInidex(task);
-        if (index != -1) {
+        if (index != -1)
+        {
             task.IsFinish = true;
             setAudioPartFinishOrNotOnSlider(index, task.IsFinish);
         }
@@ -131,13 +214,30 @@ public class LMEditor : LayerManagerBase
     /*
      * 标记任务未玩成
      */
-    public void MarkUnFinish(TaskTransform task) {
+    public void MarkUnFinish(TaskTransform task)
+    {
         int index = findTaskAtInidex(task);
         if (index != -1)
         {
             task.IsFinish = false;
             setAudioPartFinishOrNotOnSlider(index, task.IsFinish);
         }
+    }
+
+    /*
+     * 打开任务编辑层
+     */
+    public void OpenEditTaskView(TaskTransform task) {
+        EditResultLayer.SetData(task);
+        EditResultLayer.gameObject.SetActive(true);
+    }
+
+    /*
+     * 关闭任务编辑成
+     */
+    public void CloseEditTaskView() {
+        EditResultLayer.Dispose();
+        EditResultLayer.gameObject.SetActive(false);
     }
 
 }

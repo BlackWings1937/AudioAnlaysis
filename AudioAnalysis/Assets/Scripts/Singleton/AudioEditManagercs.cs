@@ -21,7 +21,8 @@ public class AudioPart
     public string strText;
     public string audioPath;
     public bool mark = false;
-    public void transformCb(string word) {
+    public void transformCb(string word)
+    {
         /*
          * 筛选出中文
          */
@@ -49,7 +50,8 @@ public class AudioPartConfig
 }
 
 [Serializable]
-public class VoiceToWordParam {
+public class VoiceToWordParam
+{
     public string format;
     public int rate;
     public int channel;
@@ -114,7 +116,7 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
     {
         get
         {
-           // if (instance_ == null) { instance_ = new AudioEditManagercs(); }
+            // if (instance_ == null) { instance_ = new AudioEditManagercs(); }
             return instance_;
         }
     }
@@ -146,7 +148,8 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
         string strJson = JsonUtility.ToJson(audioPart);
         FileUtil.CreateFile(strOutPutPath_, AUDIO_PART_CONFIG_FILE_NAME, strJson);
     }
-    private void readAudioPartConfig() {
+    private void readAudioPartConfig()
+    {
         string strJson = FileUtil.LoadFile(strOutPutPath_, AUDIO_PART_CONFIG_FILE_NAME);
         AudioPartConfig config = JsonUtility.FromJson<AudioPartConfig>(strJson);
         listAudioParts_ = config.ListAudioParts;
@@ -155,9 +158,12 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
     /*
      * 检查片段音频数组中的片段文件是否都存在
      */
-    private bool checkAudioParts() {
-        for (int i = 0;i<listAudioParts_.Count;++i) {
-            if (!File.Exists(listAudioParts_[i].audioPath)) {
+    private bool checkAudioParts()
+    {
+        for (int i = 0; i < listAudioParts_.Count; ++i)
+        {
+            if (!File.Exists(listAudioParts_[i].audioPath))
+            {
                 return false;
             }
         }
@@ -196,7 +202,7 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
         audioListPart.Add(p);
     }
 
-    private IEnumerator cutAudio(List<AudioPart> listAudioParts, byte[] buffer, int cutTime,CallBackZero cb = null)
+    private IEnumerator cutAudio(List<AudioPart> listAudioParts, byte[] buffer, int cutTime, CallBackZero cb = null)
     {
         short[] intBuffer = new short[buffer.Length / 2];
         int index = 0;
@@ -215,7 +221,8 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
             /*
              * 更新进度
              */
-            if (i% (int)batchTime == 0) {
+            if (i % (int)batchTime == 0)
+            {
                 NowProcess += batchTime / (float)(buffer.Length - 1) * 0.2f;
                 yield return new WaitForEndOfFrame();
             }
@@ -287,13 +294,14 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
             }
             if (i % (int)batchTime == 0)
             {
-                NowProcess += batchTime / (float)(testDotOneTimeValue.Length) * 0.2f ;
+                NowProcess += batchTime / (float)(testDotOneTimeValue.Length) * 0.2f;
                 yield return new WaitForEndOfFrame();
             }
         }
         NowProcess = 0.5f;
 
-        if (cb != null) {
+        if (cb != null)
+        {
             cb();
         }
     }
@@ -308,18 +316,20 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
         buffer_ = buffer;
         stream.Close();
     }
-    private void initListAudioPart(byte[] buffer,CallBackZero cb = null)
+    private void initListAudioPart(byte[] buffer, CallBackZero cb = null)
     {
-        corCut = StartCoroutine(cutAudio(listAudioParts_, buffer, 4,cb));
+        corCut = StartCoroutine(cutAudio(listAudioParts_, buffer, 4, cb));
     }
     private void transformAudioPartToWord(AudioPart audioPart)
     {
         var data = File.ReadAllBytes(audioPart.audioPath);
-        BaiduManager.Instance.BytesToWord(data,audioPart.transformCb);
+        BaiduManager.Instance.BytesToWord(data, audioPart.transformCb);
     }
 
-    public void TransformAudioPartToWordCallBack() {
-        if (isProcessing_) {
+    public void TransformAudioPartToWordCallBack()
+    {
+        if (isProcessing_)
+        {
             callBackTime++;
             NowProcess = 0.5f + (((float)callBackTime) / (float)listAudioParts_.Count) / 2;
             if (callBackTime >= listAudioParts_.Count)
@@ -345,7 +355,8 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
         yield return true;
     }
 
-    private void initFolder() {
+    private void initFolder()
+    {
         FileUtil.TryCreateFolder(strOutPutPath_ + "\\" + FLODER_NAME_FIRST_CUT);
     }
 
@@ -357,7 +368,8 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
     /*
      * 首次拆分音频结束后的回调
      */
-    private void onInitListAudioPartCallBack() {
+    private void onInitListAudioPartCallBack()
+    {
         corCut = null;
         corTrans = StartCoroutine(transformAudioPartsToWord());
     }
@@ -365,16 +377,17 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
     //-------------对外接口------------------
 
     public void initWithNew(
-        string strAudioPath, 
+        string strAudioPath,
         string outPutPath,
-        ProcessCb cb = null, 
+        ProcessCb cb = null,
         CallBackZero finishCb = null)
     {
 
         /*
          * 如果文件夹已经存在则删除
          */
-        if (Directory.Exists(strOutPutPath_ + "\\" + FLODER_NAME_FIRST_CUT)) {
+        if (Directory.Exists(strOutPutPath_ + "\\" + FLODER_NAME_FIRST_CUT))
+        {
             Directory.Delete(strOutPutPath_ + "\\" + FLODER_NAME_FIRST_CUT, true);
         }
 
@@ -396,14 +409,15 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
         initListAudioPart(buffer_, onInitListAudioPartCallBack);
     }
 
-    public void CancleProcess() {
+    public void CancleProcess()
+    {
         /*
          * 终止进程携程
          */
         isProcessing_ = false;
         if (corCut != null)
             StopCoroutine(corCut);
-        if(corTrans != null)
+        if (corTrans != null)
             StopCoroutine(corTrans);
 
         /*
@@ -412,23 +426,42 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
         Directory.Delete(strOutPutPath_ + "\\" + FLODER_NAME_FIRST_CUT, true);
     }
 
-    public bool initWithOld(string outPutPath,string audioPath)
+    public bool initWithOld(string outPutPath, string audioPath)
     {
         strOutPutPath_ = outPutPath;
-        if (File.Exists( strOutPutPath_+"\\"+ AUDIO_PART_CONFIG_FILE_NAME)) {
+        if (File.Exists(strOutPutPath_ + "\\" + AUDIO_PART_CONFIG_FILE_NAME))
+        {
             readAudioPartConfig();
-            if (checkAudioParts()) {
+            if (checkAudioParts())
+            {
                 initBuffer(audioPath);
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
         return false;
     }
 
-    public List<AudioPart> GetAudioPartsList() {
+    public List<AudioPart> GetAudioPartsList()
+    {
         return listAudioParts_;
+    }
+
+    public int GetIndexByAudioPart(AudioPart ap)
+    {
+        for (int i = 0; i < listAudioParts_.Count; ++i)
+        {
+            if (ap == listAudioParts_[i]) { return i; }
+        }
+        return -1;
+    }
+    public AudioPart GetAudioPartByIndex(int index)
+    {
+        if (index < 0 || index >= listAudioParts_.Count) { return null; }
+        return listAudioParts_[index];
     }
 
     public void Dispose()
