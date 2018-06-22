@@ -80,6 +80,8 @@
     <Compile Include="Assets\Scripts\UI\EditorResultLayer.cs" />
     <Compile Include="Assets\Scripts\UI\TableViewCell.cs" />
     <Compile Include="Assets\Scripts\UI\TableViewController.cs" />
+    <Compile Include="Assets\Scripts\UI\TVInstanceAudioParts\CellAudio.cs" />
+    <Compile Include="Assets\Scripts\UI\TVInstanceAudioParts\TableViewAudios.cs" />
     <Compile Include="Assets\Scripts\UI\TVInstanceTaskCell\CellTask.cs" />
     <Compile Include="Assets\Scripts\UI\TVInstanceTaskCell\TableViewTasks.cs" />
     <Compile Include="Assets\Scripts\UI\TVInstanceTaskResult\CellTaskResult.cs" />

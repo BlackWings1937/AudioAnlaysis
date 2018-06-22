@@ -21,6 +21,34 @@ public class AudioPart
     public string strText;
     public string audioPath;
     public bool mark = false;
+    /*
+     * 临时是否被标记使用的成员
+     */
+    private bool isUse = false;
+    public event CallBackBool OnValueChangeIsUse;
+    public bool IsUse
+    {
+        get
+        {
+            return isUse;
+        }
+
+        set
+        {
+            isUse = value;
+            if (OnValueChangeIsUse!= null) {
+                OnValueChangeIsUse.Invoke(isUse);
+            }
+        }
+    }
+
+    /*
+     * 被其他方法所引用的成员
+     */
+    public bool isRef = false;
+
+   
+
     public void transformCb(string word)
     {
         /*
@@ -454,7 +482,7 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
     {
         for (int i = 0; i < listAudioParts_.Count; ++i)
         {
-            if (ap == listAudioParts_[i]) { return i; }
+            if (ap.audioPath == listAudioParts_[i].audioPath) { return i; }
         }
         return -1;
     }
@@ -462,6 +490,15 @@ public class AudioEditManagercs : MonoBehaviour, IDispose
     {
         if (index < 0 || index >= listAudioParts_.Count) { return null; }
         return listAudioParts_[index];
+    }
+    public AudioPart GetAudioPartByAudioPart(AudioPart ap) {
+        for (int i = 0; i < listAudioParts_.Count; ++i)
+        {
+            if (ap.audioPath == listAudioParts_[i].audioPath) {
+                return listAudioParts_[i];
+            }
+        }
+        return null;
     }
 
     public void Dispose()

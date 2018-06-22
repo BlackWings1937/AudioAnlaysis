@@ -30,6 +30,16 @@ public class TaskTransform
     
     public TaskResult TopResult = null;
     public List<TaskResult> ListTaskResult = new List<TaskResult>();
+    public void SortTaskResults() {
+        ListTaskResult.Sort(
+            delegate (TaskResult a, TaskResult b) {
+                if (a.MarchRate > b.MarchRate)
+                {
+                    return -1;
+                }
+                else { return 1; }
+            });
+    }
     public string PathOfListTaskResult;
     public string StrAudioId;
     public string StrTaskWord;
@@ -43,28 +53,6 @@ public class TaskTransform
      */
     public const string FILE_NAME_PRE = "TaskTransform:";
     public const string FOLDER_NAME_RESULTS_CONFIG = "ResultConfig";
-
-    /*
-     * 保存可行方案到本地
-     */
-    public void SaveResultToLocalByOutPutPath(string outputPath) {
-        TaskResultsGroup g = new TaskResultsGroup();
-        g.ListResults = ListTaskResult;
-        string strJson = JsonUtility.ToJson(g);
-        FileUtil.CreateFile(
-            outputPath+"\\"+ FOLDER_NAME_RESULTS_CONFIG
-            , FILE_NAME_PRE+ StrTaskWord,
-            strJson);
-    }
-
-    /*
-     * 读取所有方案到内存
-     */
-    public void ReadResultToMemory(string outputPath) {
-        string strJson = FileUtil.LoadFile(outputPath + "\\" + FOLDER_NAME_RESULTS_CONFIG, FILE_NAME_PRE + StrTaskWord);
-        TaskResultsGroup g = JsonUtility.FromJson<TaskResultsGroup>(strJson);
-        ListTaskResult = g.ListResults;
-    }
 
     public bool IsFinish
     {
@@ -195,3 +183,28 @@ public class TaskManager : MonoBehaviour, IDisposable
 
 
 }
+
+/*
+ * 保存可行方案到本地
+ */
+/*
+public void SaveResultToLocalByOutPutPath(string outputPath) {
+   TaskResultsGroup g = new TaskResultsGroup();
+   g.ListResults = ListTaskResult;
+   string strJson = JsonUtility.ToJson(g);
+   FileUtil.CreateFile(
+       outputPath+"\\"+ FOLDER_NAME_RESULTS_CONFIG
+       , FILE_NAME_PRE+ StrTaskWord,
+       strJson);
+}
+*/
+/*
+ * 读取所有方案到内存
+ */
+/*
+public void ReadResultToMemory(string outputPath) {
+   string strJson = FileUtil.LoadFile(outputPath + "\\" + FOLDER_NAME_RESULTS_CONFIG, FILE_NAME_PRE + StrTaskWord);
+   TaskResultsGroup g = JsonUtility.FromJson<TaskResultsGroup>(strJson);
+   ListTaskResult = g.ListResults;
+}
+*/
