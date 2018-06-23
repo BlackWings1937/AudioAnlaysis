@@ -113,13 +113,7 @@ public class CanvasManager : MonoBehaviour
     /*
     private void OnGUI()
     {
-        string[] paths = {
-            "C:\\Users\\DELL\\Desktop\\OutPutPath\\firstCutTemp\\1.pc",
-            "C:\\Users\\DELL\\Desktop\\OutPutPath\\firstCutTemp\\2.pc",
-            "C:\\Users\\DELL\\Desktop\\OutPutPath\\firstCutTemp\\3.pc"
-        };
-        if (GUILayout.Button("play")) {
-            PCMPlayer.Instance.PlayerLocalFiles(paths);
-        }
+        if (GUILayout.Button("stop count"))
+            lap_.Clear();
     }*/
 }

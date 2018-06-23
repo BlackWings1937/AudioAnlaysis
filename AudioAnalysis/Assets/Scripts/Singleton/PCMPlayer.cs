@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.IO;
 
 public class PCMPlayer : MonoBehaviour
 {
@@ -43,23 +42,7 @@ public class PCMPlayer : MonoBehaviour
      */
     public void PlayerLocalFiles(string[] pathArr)
     {
-        List<byte[]> allBytes = new List<byte[]>();
-        long length = 0;
-        for (int i = 0;i<pathArr.Length;++i) {
-            FileStream stream = new FileInfo(pathArr[i]).OpenRead();
-            byte[] buffer = new byte[stream.Length];
-            stream.Read(buffer, 0, Convert.ToInt32(stream.Length));
-            allBytes.Add(buffer);
-            length += buffer.Length;
-            stream.Close();
-        }
-        byte[] allBuffer = new byte[length];
-        int index = 0;
-        for (int i = 0;i<allBytes.Count;++i) {
-            System.Buffer.BlockCopy(allBytes[i],0,allBuffer, index, allBytes[i].Length);
-            index += allBytes[i].Length;
-        }
-        PlayerByteBuffer(allBuffer);
+
     }
 
     public void PlayerByteBuffer(byte[] buffer) {

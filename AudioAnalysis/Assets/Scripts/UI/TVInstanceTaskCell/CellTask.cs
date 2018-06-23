@@ -10,7 +10,6 @@ public class CellTask : TableViewCell<TaskTransform> {
     public Text TextAudioID = null;
     public Text TextAudioTask = null;
     public Text TextAudioExcel = null;
-    public Text TextMatchRate = null;
 
     public GameObject GFinishBG = null;
     public GameObject GUnFinishBG = null;
@@ -44,8 +43,9 @@ public class CellTask : TableViewCell<TaskTransform> {
         TextAudioID.text = itemData.StrAudioId;
         TextAudioTask.text = itemData.StrTaskWord;
         TextAudioExcel.text = ""+itemData.ExcelCol;
-        TextMatchRate.text = "" + itemData.ListTaskResult.Count;
-        onIsFinishChange(itemData.isFinish);
+        GFinishBG.SetActive(itemData.IsFinish);
+        GUnFinishBG.SetActive(!itemData.IsFinish);
+
         /*
          * 注册事件
          */
@@ -69,17 +69,7 @@ public class CellTask : TableViewCell<TaskTransform> {
     }
 
     //--------------UI相应事件-----------------
-    public void onBtnClickPlay() {
-        if (data_ != null) {
-            data_.SortTaskResults();
-            TaskResult tr = data_.ListTaskResult[0];
-            string[] paths = new string[tr.ListAudioParts.Count];
-            for (int i = 0;i<paths.Length;++i) {
-                paths[i] = tr.ListAudioParts[i].audioPath;
-            }
-            PCMPlayer.Instance.PlayerLocalFiles(paths);
-        }
-    }
+    public void onBtnClickPlay() { }
     public void onBtnClickEdit() {
         CacheManager.GetComponent<LMEditor>().OpenEditTaskView(data_);
     }

@@ -185,48 +185,7 @@ public class TableViewController<T> : ViewController		// ViewControllerクラス
     public void MoveTableViewContentToRate(float rate) {
         Vector2 sizeOfContent = ((RectTransform)CachedScrollRect.content.transform).sizeDelta;
         float x = -sizeOfContent.x * rate;
-        Vector3 bp = CachedScrollRect.content.position;
         GameObjectUtil.SetX(cachedScrollRect.content.gameObject,x);
-        // OnScrollPosChanged(CachedScrollRect.content.position);
-        UpdateVisibleRect();
-        Vector3 np = CachedScrollRect.content.position;
-        float value = np.x - bp.x;
-        if (value<0) {
-            ReuseCells(-1);
-        }
-        else {
-            ReuseCells(1);
-        }
-    }
-
-    /*
-     * 移动内容层到指定的索引
-     */
-    public void MoveTableViewContentToIndex(int index) {
-        Vector2 sizeOfContent = ((RectTransform)CachedScrollRect.content.transform).sizeDelta;
-        Vector2 sizeOfScroll = CachedRectTransform.sizeDelta;
-        float min = -(sizeOfContent.x - sizeOfScroll.x);
-        float max = 0;
-        float contentX = (index) * -CellWidthAtIndex(index) + (index - 1) * -spacingWidth;
-        if (contentX > max) contentX = max;
-        if (contentX < min) contentX = min;
-
-        /*
-         * 修复千年bug 滚动条
-         */
-        Vector3 bp = CachedScrollRect.content.position;
-        GameObjectUtil.SetX(cachedScrollRect.content.gameObject, contentX);
-        Vector3 np = CachedScrollRect.content.position;
-        float value = np.x - bp.x;
-        UpdateVisibleRect();
-        if (value < 0)
-        {
-            ReuseCells(1);
-        }
-        else
-        {
-            ReuseCells(-1);
-        }
     }
 
     protected void UpdateContentsByIndex(int index) {
