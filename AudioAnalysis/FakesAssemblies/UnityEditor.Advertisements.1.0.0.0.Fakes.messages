@@ -1,8 +1,0 @@
-F:\AudioAnalysis\Fakes\UnityEditor.Advertisements.fakes : warning : 无法为 UnityEditor.AdsImporter 生成存根: 类型对 exported or assembly(UnityEditor.Advertisements.1.0.0.0.Fakes) 不可见。
-F:\AudioAnalysis\Fakes\UnityEditor.Advertisements.fakes : warning : 无法为 UnityEditor.Advertisements.UnityAdsEditor 生成存根: 类型已密封。
-F:\AudioAnalysis\Fakes\UnityEditor.Advertisements.fakes : warning : 无法为 UnityEditorInternal.Advertisements.UnityAdsPostprocessor 生成存根: 类型已密封。
-F:\AudioAnalysis\Fakes\UnityEditor.Advertisements.fakes : warning : 无法为 UnityVS.Processed 生成存根: 类型已密封。
-F:\AudioAnalysis\Fakes\UnityEditor.Advertisements.fakes : warning : 无法为 UnityEditor.AdsImporter 生成填充码: 类型对 exported or assembly(UnityEditor.Advertisements.1.0.0.0.Fakes) 不可见。
-F:\AudioAnalysis\Fakes\UnityEditor.Advertisements.fakes : warning : 无法为 UnityEditor.Advertisements.UnityAdsEditor 生成填充码: 类型对 exported or assembly(UnityEditor.Advertisements.1.0.0.0.Fakes) 不可见。
-F:\AudioAnalysis\Fakes\UnityEditor.Advertisements.fakes : warning : 无法为 UnityEditorInternal.Advertisements.UnityAdsPostprocessor 生成填充码: 类型对 exported or assembly(UnityEditor.Advertisements.1.0.0.0.Fakes) 不可见。
-F:\AudioAnalysis\Fakes\UnityEditor.Advertisements.fakes : warning : 无法为 UnityVS.Processed 生成填充码: 类型对 exported or assembly(UnityEditor.Advertisements.1.0.0.0.Fakes) 不可见。
